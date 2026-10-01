@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PCBuilder — Compatibility PC Builder</title>
+<meta name="description" content="PCBuilder — CPU, GPU, motherboard, RAM, SSD, PSU, cooler va case tanlab, compatibility va wattage hisoblaydigan PC builder.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:#070b14;color:#f8fafc;min-height:100vh}
+body:before{content:"";position:fixed;inset:0;z-index:-3;background:radial-gradient(circle at 15% 15%,rgba(0,217,255,.12),transparent 28%),radial-gradient(circle at 85% 70%,rgba(99,102,241,.13),transparent 30%),#070b14}
+.grid{position:fixed;inset:-20%;z-index:-2;opacity:.18;background-image:linear-gradient(rgba(0,217,255,.2) 1px,transparent 1px),linear-gradient(90deg,rgba(0,217,255,.2) 1px,transparent 1px);background-size:50px 50px;transform:perspective(550px) rotateX(62deg);animation:grid 14s linear infinite}
+@keyframes grid{to{background-position:0 50px,50px 0}}
+header{position:sticky;top:0;z-index:50;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;background:rgba(7,11,20,.84);backdrop-filter:blur(18px);border-bottom:1px solid #1e293b}
+.logo{font-size:25px;font-weight:900}.logo span{color:#00d9ff}
+nav a{color:#cbd5e1;text-decoration:none;margin-left:22px;font-weight:700}
+.hero{text-align:center;padding:55px 20px 30px}.hero h1{font-size:clamp(36px,6vw,66px);margin-bottom:14px}.hero h1 span{color:#00d9ff}.hero p{color:#94a3b8;max-width:760px;margin:auto;line-height:1.6}
+.wrap{max-width:1400px;margin:auto;padding:20px}
+.toolbar{display:flex;gap:10px;margin-bottom:18px}.search{flex:1;padding:14px 16px;border-radius:12px;border:1px solid #263247;background:#0e1626;color:#fff;outline:none}.filter{padding:14px;border-radius:12px;border:1px solid #263247;background:#0e1626;color:#fff}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:20px}
+.catalog{background:rgba(12,18,31,.86);border:1px solid #1e293b;border-radius:20px;padding:20px}
+.category{margin-bottom:28px}.category h2{font-size:19px;margin-bottom:12px;display:flex;justify-content:space-between}.category h2 small{font-size:12px;color:#64748b}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.card{background:#0d1524;border:1px solid #223047;border-radius:16px;padding:12px;transition:.22s;position:relative}.card:hover{transform:translateY(-4px);border-color:#00d9ff;box-shadow:0 12px 30px rgba(0,217,255,.1)}
+.card.incompatible{opacity:.55}.photo{height:165px;background:#f4f6f8;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:11px}.photo img{width:100%;height:100%;object-fit:contain}.brand{color:#00d9ff;font-size:12px;font-weight:800}.name{font-weight:800;margin:5px 0}.spec{font-size:12px;color:#94a3b8;line-height:1.55;min-height:38px}.price{font-size:18px;font-weight:900;margin-top:8px}
+.add{width:100%;margin-top:10px;padding:11px;border:0;border-radius:10px;background:#00d9ff;color:#001018;font-weight:900;cursor:pointer}.add:hover{filter:brightness(1.08)}
+.side{position:sticky;top:82px;height:max-content;background:rgba(12,18,31,.92);border:1px solid #1e293b;border-radius:20px;padding:20px}
+.side h2{margin-bottom:14px}.total{font-size:34px;color:#00d9ff;font-weight:900}.box{margin-top:12px;background:#0d1524;border:1px solid #223047;border-radius:13px;padding:13px}.box-title{font-size:12px;color:#64748b;margin-bottom:7px}.watt{font-size:28px;font-weight:900}.green{color:#22c55e}.yellow{color:#f59e0b}.red{color:#ef4444}
+.build-item{display:grid;grid-template-columns:48px 1fr auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #1e293b}.mini{width:48px;height:42px;background:#fff;border-radius:7px;overflow:hidden}.mini img{width:100%;height:100%;object-fit:contain}.build-item b{font-size:13px}.remove{background:none;border:0;color:#ef4444;cursor:pointer;font-size:18px}
+.check{margin-top:14px}.check div{padding:7px 0;font-size:13px;border-bottom:1px solid #182236}
+button.full{width:100%;padding:13px;margin-top:12px;border:0;border-radius:11px;font-weight:900;cursor:pointer;background:#172238;color:#fff;border:1px solid #2a3952}
+.clear{color:#fecaca!important;border-color:#5a2630!important}
+.note{font-size:11px;color:#64748b;line-height:1.5;margin-top:12px}
+footer{text-align:center;color:#64748b;padding:30px}
+@media(max-width:1050px){.layout{grid-template-columns:1fr}.side{position:static}}
+@media(max-width:650px){nav{display:none}.toolbar{flex-direction:column}.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="grid"></div>
+<header>
+  <div class="logo">PC<span>Builder</span> ⚡</div>
+  <nav><a href="#">Home</a><a href="#parts">Parts</a><a href="#build">My Build</a></nav>
+</header>
+
+<section class="hero">
+  <h1>Build Your <span>Perfect PC</span></h1>
+  <p>Komponentni tanla, <b>Add to Build</b> bos. Sayt CPU socket, RAM turi, GPU uzunligi, PSU wattage va cooler mosligini avtomatik tekshiradi.</p>
+</section>
+
+<div class="wrap" id="parts">
+  <div class="toolbar">
+    <input id="search" class="search" placeholder="🔎 Komponent qidirish..." oninput="render()">
+    <select id="filter" class="filter" onchange="render()">
+      <option value="all">Barcha kategoriyalar</option>
+    </select>
+  </div>
+
+  <div class="layout">
+    <main class="catalog" id="catalog"></main>
+
+    <aside class="side" id="build">
+      <h2>🧩 My Build</h2>
+      <div class="box">
+        <div class="box-title">TOTAL PRICE</div>
+        <div class="total" id="total">0 so'm</div>
+      </div>
+      <div class="box">
+        <div class="box-title">ESTIMATED SYSTEM POWER</div>
+        <div class="watt"><span id="power">0</span> W</div>
+        <div id="psuNeed" class="note">PSU tanlanmagan</div>
+      </div>
+      <div class="box">
+        <div class="box-title">SELECTED PARTS</div>
+        <div id="buildList"></div>
+      </div>
+      <div class="box">
+        <div class="box-title">COMPATIBILITY CHECK</div>
+        <div class="check" id="checks"></div>
+      </div>
+      <button class="full" onclick="saveBuild()">💾 Buildni saqlash</button>
+      <button class="full clear" onclick="clearBuild()">🗑 Buildni tozalash</button>
+      <div class="note">Eslatma: bu lokal compatibility engine. BIOS support, ayrim GPU AIB o'lchamlari va kabel talablari ishlab chiqaruvchiga qarab farq qilishi mumkin.</div>
+    </aside>
+  </div>
+</div>
+
+<footer>© 2026 PCBuilder — Compatibility & Wattage Builder</footer>
+
+<script>
+const parts = [
+  {id:"cpu7800x3d",cat:"CPU",brand:"AMD",name:"Ryzen 7 7800X3D",price:4500000,watt:120,socket:"AM5",ram:"DDR5",image:"https://artline.ua/storage/images/products/13224/gallery/161634/1400_gallery_1684091016748307_0.webp",spec:"8 cores / 16 threads • 120W • AM5",source:"AMD specifications"},
+  {id:"cpu12400f",cat:"CPU",brand:"Intel",name:"Core i5-12400F",price:2500000,watt:65,socket:"LGA1700",ram:"DDR4/DDR5",image:"https://m.media-amazon.com/images/I/61u7Kf3WJ8L._AC_SL1500_.jpg",spec:"6 cores / 12 threads • 65W • LGA1700",source:"Product image"},
+  {id:"gpu5070",cat:"GPU",brand:"NVIDIA",name:"GeForce RTX 5070 12GB",price:9000000,watt:250,psu:650,length:242,image:"https://multimedia.bbycastatic.ca/multimedia/products/1500x1500/191/19193/19193219_2.jpg",spec:"12GB GDDR7 • 250W • 242mm reference",source:"NVIDIA reference card"},
+  {id:"mbb650",cat:"Motherboard",brand:"MSI",name:"PRO B650-S WiFi",price:2800000,socket:"AM5",ram:"DDR5",form:"ATX",m2:2,pcie:true,image:"https://m.media-amazon.com/images/I/81rrqoDcK-L._AC_SL1500_.jpg",spec:"AM5 • DDR5 • ATX • 2× M.2",source:"MSI PRO B650-S WiFi"},
+  {id:"mmb760",cat:"Motherboard",brand:"ASUS",name:"B760 DDR5 ATX",price:2600000,socket:"LGA1700",ram:"DDR5",form:"ATX",m2:2,pcie:true,image:"https://m.media-amazon.com/images/I/81wY3kR5lVL._AC_SL1500_.jpg",spec:"LGA1700 • DDR5 • ATX • PCIe x16",source:"Product image"},
+  {id:"ram32",cat:"RAM",brand:"Corsair",name:"Vengeance RGB 32GB DDR5-6000",price:1500000,ram:"DDR5",capacity:32,image:"https://www.corsair.com/corsairmedia/sys_master/productcontent/CMH32GX5M2B6000C28/Gallery/CMH32GX5M2B6000C28_01.webp",spec:"32GB (2×16GB) • DDR5 • 6000MT/s",source:"Corsair Vengeance RGB"},
+  {id:"ssd990",cat:"SSD",brand:"Samsung",name:"990 PRO 2TB NVMe",price:1800000,m2:true,capacity:2000,watt:8,image:"https://www.abcshop-eg.com/en/shop/computer-parts-9/mz-v9p2t0bw-samsung-990-pro-2tb-pcie-40-nvme-m2-ssd-1347",spec:"2TB • M.2 NVMe • PCIe 4.0",source:"Samsung 990 PRO"},
+  {id:"psu850",cat:"PSU",brand:"Corsair",name:"RM850x 850W 80+ Gold",price:2200000,psuW:850,image:"https://www.scan.co.uk/images/products/xlarge/3500400-xl-a.jpg",spec:"850W • 80+ Gold • ATX • Modular",source:"Corsair RM850x"},
+  {id:"psu650",cat:"PSU",brand:"DeepCool",name:"650W 80+ Bronze",price:1000000,psuW:650,image:"https://m.media-amazon.com/images/I/71c7e3QX3uL._AC_SL1500_.jpg",spec:"650W • 80+ Bronze",source:"Product image"},
+  {id:"cooler620",cat:"CPU Cooler",brand:"DeepCool",name:"AK620",price:950000,sockets:["AM5","AM4","LGA1700","LGA1200","LGA115x"],coolW:260,height:160,image:"https://image.citycenter.jo/cache/catalog/12022/AK6201-1200x1200.jpg",spec:"260W cooling • AM5/AM4/LGA1700 • 160mm",source:"DeepCool AK620"},
+  {id:"caseh6",cat:"Case",brand:"NZXT",name:"H6 Flow RGB",price:2500000,form:["ATX","mATX"],gpuMax:365,coolMax:163,image:"https://c1.neweggimages.com/ProductImageCompressAll1280/11-146-358-01.jpg",spec:"ATX / mATX • GPU clearance 365mm",source:"NZXT H6 Flow RGB"}
+];
+
+const categories=["CPU","GPU","Motherboard","RAM","SSD","PSU","CPU Cooler","Case"];
+const selected={};
+
+function money(n){return n.toLocaleString("uz-UZ")+" so'm"}
+
+function get(id){return parts.find(p=>p.id===id)}
+function selectedPart(cat){return get(selected[cat])}
+
+function imageFor(p){
+  // Some retailer pages may reject direct image hotlinking. If so, a clean fallback is shown.
+  const fallback=`https://placehold.co/600x400/0b1220/00d9ff?text=${encodeURIComponent(p.cat+"%0A"+p.name)}`;
+  return `<img src="${p.image}" alt="${p.name}" onerror="this.onerror=null;this.src='${fallback}'">`;
+}
+
+function isCompatible(p){
+  const cpu=selectedPart("CPU"), mb=selectedPart("Motherboard"), ram=selectedPart("RAM"), gpu=selectedPart("GPU"), psu=selectedPart("PSU"), cooler=selectedPart("CPU Cooler"), pc=selectedPart("Case");
+  if(p.cat==="Motherboard" && cpu && p.socket!==cpu.socket) return false;
+  if(p.cat==="Motherboard" && ram && p.ram!==ram.ram) return false;
+  if(p.cat==="CPU" && mb && p.socket!==mb.socket) return false;
+  if(p.cat==="CPU" && ram && p.ram!=="DDR4/DDR5" && p.ram!==ram.ram) return false;
+  if(p.cat==="RAM" && mb && p.ram!==mb.ram) return false;
+  if(p.cat==="GPU" && pc && p.length>pc.gpuMax) return false;
+  if(p.cat==="PSU" && gpu && p.psuW < (gpu.psu||0)) return false;
+  if(p.cat==="CPU Cooler" && cpu && !p.sockets.includes(cpu.socket)) return false;
+  if(p.cat==="CPU Cooler" && cpu && p.coolW < cpu.watt) return false;
+  if(p.cat==="Case" && mb && !p.form.includes(mb.form)) return false;
+  if(p.cat==="Case" && gpu && p.gpuMax < gpu.length) return false;
+  return true;
+}
+
+function render(){
+  const q=document.getElementById("search").value.toLowerCase();
+  const f=document.getElementById("filter").value;
+  const catalog=document.getElementById("catalog");
+  catalog.innerHTML="";
+  categories.forEach(cat=>{
+    if(f!=="all" && f!==cat)return;
+    const list=parts.filter(p=>p.cat===cat && (p.name+" "+p.brand+" "+p.spec).toLowerCase().includes(q));
+    if(!list.length)return;
+    const sec=document.createElement("section");sec.className="category";
+    sec.innerHTML=`<h2>${cat}<small>${list.length} ta</small></h2><div class="cards"></div>`;
+    const cards=sec.querySelector(".cards");
+    list.forEach(p=>{
+      const ok=isCompatible(p);
+      const chosen=selected[p.cat]===p.id;
+      const card=document.createElement("article");
+      card.className="card"+(!ok?" incompatible":"");
+      card.innerHTML=`<div class="photo">${imageFor(p)}</div>
+        <div class="brand">${p.brand}</div>
+        <div class="name">${p.name}</div>
+        <div class="spec">${p.spec}</div>
+        <div class="price">${money(p.price)}</div>
+        <button class="add" ${!ok?"disabled":""} onclick="add('${p.id}')">${chosen?"✓ Added":"＋ Add to Build"}</button>`;
+      cards.appendChild(card);
+    });
+    catalog.appendChild(sec);
+  });
+}
+
+function add(id){
+  const p=get(id);
+  if(!isCompatible(p)){alert("⚠️ Bu detal hozirgi build bilan mos emas.");return}
+  selected[p.cat]=p.id;
+  render();updateBuild();
+}
+
+function remove(cat){delete selected[cat];render();updateBuild()}
+
+function calculatePower(){
+  let power=45; // motherboard + chipset + baseline system
+  const cpu=selectedPart("CPU"),gpu=selectedPart("GPU"),ram=selectedPart("RAM"),ssd=selectedPart("SSD"),fans=selectedPart("Case");
+  if(cpu)power+=cpu.watt;
+  if(gpu)power+=gpu.watt;
+  if(ram)power+=10;
+  if(ssd)power+=8;
+  if(fans)power+=15;
+  return Math.ceil(power*1.2/10)*10; // 20% headroom
+}
+
+function updateBuild(){
+  let total=0;
+  const list=document.getElementById("buildList");
+  list.innerHTML="";
+  categories.forEach(cat=>{
+    const p=selectedPart(cat);
+    if(!p)return;
+    total+=p.price;
+    const row=document.createElement("div");row.className="build-item";
+    row.innerHTML=`<div class="mini">${imageFor(p)}</div><b>${p.name}</b><button class="remove" onclick="remove('${cat}')">×</button>`;
+    list.appendChild(row);
+  });
+  document.getElementById("total").textContent=money(total);
+  const need=calculatePower();
+  document.getElementById("power").textContent=need;
+  const psu=selectedPart("PSU"),gpu=selectedPart("GPU");
+  document.getElementById("psuNeed").textContent=psu?`Tanlangan PSU: ${psu.psuW}W`+(gpu&&psu.psuW<(gpu.psu||0)?" — yetarli emas":" — OK"):(gpu?`GPU ishlab chiqaruvchi tavsiyasi: ${gpu.psu}W`:"PSU tanlanmagan");
+  if(psu && psu.psuW<need)document.getElementById("psuNeed").className="note red";
+  else if(psu)document.getElementById("psuNeed").className="note green";
+  else document.getElementById("psuNeed").className="note yellow";
+  checks();
+}
+
+function checks(){
+  const c=document.getElementById("checks");
+  const cpu=selectedPart("CPU"),mb=selectedPart("Motherboard"),ram=selectedPart("RAM"),gpu=selectedPart("GPU"),psu=selectedPart("PSU"),cooler=selectedPart("CPU Cooler"),pc=selectedPart("Case");
+  const out=[];
+  function line(ok,text,neutral=false){out.push(`<div class="${neutral?"":" "+(ok?"green":"red")}">${neutral?"ℹ️":ok?"✅":"❌"} ${text}</div>`)}
+  if(cpu&&mb)line(cpu.socket===mb.socket,`CPU socket: ${cpu.socket} ↔ Motherboard: ${mb.socket}`);
+  else line(true,"CPU ↔ Motherboard socket",true);
+  if(mb&&ram)line(mb.ram===ram.ram,`RAM: ${ram.ram} ↔ Motherboard: ${mb.ram}`);
+  else line(true,"RAM type ↔ Motherboard",true);
+  if(gpu&&pc)line(gpu.length<=pc.gpuMax,`GPU: ${gpu.length}mm ↔ Case max: ${pc.gpuMax}mm`);
+  else line(true,"GPU ↔ Case clearance",true);
+  if(cpu&&cooler)line(cooler.sockets.includes(cpu.socket)&&cooler.coolW>=cpu.watt,`Cooler: ${cooler.coolW}W ↔ CPU: ${cpu.watt}W`);
+  else line(true,"CPU cooler compatibility",true);
+  if(psu)line(psu.psuW>=calculatePower(),`PSU: ${psu.psuW}W ↔ estimated need: ${calculatePower()}W`);
+  else line(true,"PSU wattage",true);
+  c.innerHTML=out.join("");
+}
+
+function saveBuild(){
+  localStorage.setItem("pcbuilder2026",JSON.stringify(selected));
+  alert("✅ Build saqlandi!");
+}
+function clearBuild(){
+  Object.keys(selected).forEach(k=>delete selected[k]);
+  localStorage.removeItem("pcbuilder2026");
+  render();updateBuild();
+}
+function load(){
+  try{Object.assign(selected,JSON.parse(localStorage.getItem("pcbuilder2026")||"{}"))}catch(e){}
+}
+categories.forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c;document.getElementById("filter").appendChild(o)});
+load();render();updateBuild();
+</script>
+</body>
+</html>
